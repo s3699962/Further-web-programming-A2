@@ -1,0 +1,645 @@
+body{
+  padding-bottom: 60px; /*footer height */
+  background-color: #f2f2f2;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.loginInfo {
+  color: #8585e0;
+  font-weight: bold;
+}
+
+.homeAboutContainer {
+  vertical-align: middle;
+}
+
+.mainInfo {
+  display: inline-block;
+  vertical-align: top;
+  padding-right: 30px;
+}
+
+.textContainer {
+  max-width: 60%;
+}
+.brandContainer {
+  margin: 5px 5px 5px 0;
+  padding: 9px 20px !important;
+  border: white 1px solid !important;
+  border-radius: 50px;
+}
+
+.brandContainer:hover {
+  border: #4d4d4d 1px solid !important;
+}
+
+ /*Style the top navigation bar*/
+.navBar {
+  overflow: hidden;
+  background-color: #8585e0;
+  padding: 0 200px;
+  display: block;
+}
+
+/* Style the navigation bar links */
+.linkContainer {
+  overflow: hidden;
+  background-color: Transparent;
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 15px 20px;
+  text-decoration: none;
+  font-family: 'Gill Sans', sans-serif;
+  font-size: larger;
+  cursor: pointer;
+  border: none;
+}
+
+.linkContainer i {
+ margin-right: 8px;
+}
+
+.activeNavTab {
+  border-bottom: white 4px solid;
+  padding: 15px 20px 11px 20px;
+}
+
+.linkContainer a {
+  text-decoration: none;
+}
+
+a:link, a:visited {
+  color: white;
+}
+
+.nav-link:hover {
+  color: #4d4d4d;
+}
+
+a:hover {
+  color: #4d4d4d;
+}
+
+/* Change color on hover */
+.linkContainer:hover {
+  background-color: #adadeb;
+  color: #4d4d4d;
+}
+
+.loginContainer {
+  overflow: hidden;
+  position: relative;
+  float: right;
+}
+
+.welcomeHeader {
+  float: right;
+  overflow: hidden;
+  background-color: Transparent;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 16px;
+  margin-top: 3px;
+  border: none;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+footer {
+  padding: 10px 215px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  font-family: 'Gill Sans', sans-serif;
+}
+
+.footerContainer {
+  background-color: #ebebfa;
+  color: #4d4d4d;
+  box-shadow: 0 0 4px 10px #ebebfa;
+}
+
+.bodyContainer {
+  height: 100%;
+  margin: 20px 215px;
+  border-radius: 5px;
+  font-family: 'Gill Sans', sans-serif;
+  padding: 10px 20px 20px 20px;
+  background-color: white;
+  box-shadow: 3px 3px 8px #bfbfbf ;
+}
+
+.containerTabs {
+  color: #4d4d4d;
+  margin: 10px 0;
+  border-bottom: #d9d9d9 2px solid;
+  background-color: white;
+}
+
+.tabButton {
+  display: inline-block;
+  padding: 0 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.activeTabButton {
+  display: inline-block;
+  background-color: #d9d9d9;
+  padding: 0 20px;
+}
+
+.tabButton button {
+  padding: 5px;
+  border: none;
+  background: none;
+  font-family: 'Gill Sans', sans-serif;
+  color: #4d4d4d;
+  font-size: 150%;
+}
+
+.form-group {
+  padding: 5px;
+  width: 100%;
+}
+
+.form-group button {
+  border: none;
+  padding: 10px 30px;
+  border-radius: 5px;
+  font-family: 'Gill Sans', sans-serif;
+  width: 100%;
+  font-size: 100%;
+  background-color: #8585e0;
+  cursor: pointer;
+  color: white;
+}
+
+.form-group button:hover {
+  background-color: #adadeb;
+  color: #4d4d4d;
+}
+
+.form-group button:disabled {
+  background-color: #d9d9d9;
+  color: #4d4d4d;
+  font-family: 'Gill Sans', sans-serif;
+  cursor: default;
+}
+
+.formHeader {
+  margin: 0 0 10px 0;
+  padding-left: 5px;
+  color: #8585e0;
+  font-size: x-large;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+}
+
+.profileHeader {
+  font-size: xx-large;
+  font-weight: bolder;
+  border-bottom: #8585e0 1px solid;
+  padding: 5px 0;
+}
+
+.formComponentContainer {
+  display: inline-block;
+  font-size: 120%;
+}
+
+.labelContainer {
+  width: 20%;
+}
+
+.inputContainer {
+  width: 80%;
+}
+
+.form {
+  width: 50%;
+}
+
+.formRow {
+  padding-top: 10px;
+  overflow: hidden;
+}
+
+
+.formInput {
+  box-sizing: border-box;
+  font-size: 100%;
+  font-family: 'Gill Sans', sans-serif;
+  border:  #4d4d4d 1px solid;
+  border-radius: 3px;
+  padding: 3px;
+  width: 100%;
+}
+
+.formInput:focus {
+  outline: #8585e0 2px auto;
+}
+
+.activeButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #8585e0;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-family: 'Gill Sans', sans-serif;
+  font-size: 100%;
+  cursor: pointer;
+}
+
+.activeButton:hover {
+  background-color: #adadeb;
+  color: #4d4d4d;
+}
+
+.disabledButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #d9d9d9;
+  border: none;
+  border-radius: 5px;
+  color: #4d4d4d;
+  font-family: 'Gill Sans', sans-serif;
+  font-size: 100%;
+}
+
+.errorMessageContainer {
+  margin: 10px 0;
+}
+
+.warningContainer {
+  margin: 0 0 10px 0;
+  width: 100%;
+}
+
+.message {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.error {
+  background-color: #ffe6e6;
+  border: #cc0000 1px solid;
+  color: #cc0000;
+}
+
+.warning {
+  background-color: #fff2e6;
+  border: #ff8000 1px solid;
+  color: #ff8000;
+  font-size: small;
+}
+
+.warningWrapper {
+  margin-right: -18px;
+}
+
+.message i {
+  margin: 0 10px;
+}
+
+.userInfoContainer {
+  display: inline-block;
+  margin: 0 20px;
+  vertical-align: middle;
+}
+
+.userInfoContainer h3 {
+  margin: 5px 0 3px 0;
+}
+
+.userInfoContainer p {
+  margin: 0 0 5px 0;
+}
+
+.profileBody i {
+  font-size: xx-large;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.profileBody {
+  color: #4d4d4d;
+}
+
+.userText {
+  display: inline-block;
+}
+
+.dateJoinedHeader {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.editContainer {
+  display: inline-block;
+  font-size: small;
+  margin-left: 50px;
+  padding-top: 5px;
+  position: relative;
+  color: #8585e0;
+  vertical-align: middle;
+  float: right;
+}
+
+.editContainer i {
+  font-size: small;
+  padding-right: 3px
+}
+
+.smallButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8585e0;
+  padding-right: 10px;
+  vertical-align: middle;
+}
+
+.smallButton:hover {
+  color: #4d4d4d;
+}
+
+.confirmationModal {
+  position: absolute;
+  margin: 60px 500px;
+  border: 1px solid #8585e0;
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 5px;
+  outline: none;
+  color: #4d4d4d;
+  font-family: 'Gill Sans', sans-serif;
+  box-shadow: 3px 3px 8px #bfbfbf ;
+}
+
+.headerContainer {
+  background-color: #8585e0;
+  color: white;
+  font-family: 'Libre Baskerville', serif;
+  padding: 20px 20px 10px 20px;
+}
+
+.headerContainer button {
+  float: right;
+  background: none;
+  color: white;
+  border: none;
+  display: inline-block;
+  cursor: pointer;
+  font-family: 'Gill Sans', sans-serif;
+}
+
+.headerContainer button:hover {
+  color: #4d4d4d;
+}
+
+.headerContainer button i{
+  padding-right: 3px;
+}
+
+.headerContainer h2 {
+  margin: 0;
+  display: inline-block;
+}
+
+.modalBody {
+  padding: 20px;
+}
+
+.modalButtons {
+  padding: 20px;
+  position: relative;
+  float: right;
+}
+
+.modalButtons button {
+  border: none;
+  min-width: 100px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-family: 'Gill Sans', sans-serif;
+}
+
+.disabledButton {
+  background-color: #d9d9d9;
+  color: #4d4d4d;
+  border: none;
+}
+
+.submitButton {
+  background-color: #8585e0;
+  color: white;
+  border: none;
+  cursor: pointer
+}
+
+.submitButton:hover {
+  background-color: #adadeb;
+  color: #4d4d4d;
+}
+
+.cancelButton {
+  margin-right: 10px;
+  cursor: pointer
+}
+
+.cancelButton:hover {
+  background-color: #4d4d4d;
+  color: white;
+}
+
+
+.formButtons {
+  padding-top: 10px;
+  position: relative;
+  float: right;
+  min-width: 100px;
+}
+
+.formButtons button {
+  border: none;
+  padding: 10px 30px;
+  border-radius: 50px;
+  font-family: 'Gill Sans', sans-serif;
+}
+
+.textBoxBorder {
+  color: #8585e0;
+  border: #8585e0 2px solid;
+  border-radius: 5px;
+}
+
+.textBoxBorder legend {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+}
+
+.postInputContainer {
+  padding: 0 20px 0 0;
+}
+
+.postInput {
+  padding: 8px;
+  width: 100%;
+  border: #8585e0 1px solid;
+  border-radius: 5px;
+  color: #4d4d4d;
+  font-family: 'Gill Sans', sans-serif;
+}
+
+.postInput:focus {
+  outline: none;
+  border: #4d4d4d 1px solid;
+}
+
+.forumButtons {
+  padding: 10px;
+  text-align: right;
+}
+
+.forumButtons button {
+  border: none;
+  min-width: 100px;
+  padding: 10px 30px;
+  border-radius: 50px;
+  font-family: 'Gill Sans', sans-serif;
+}
+
+.postHeader {
+  width: 100%;
+  color: #8585e0;
+  font-family: 'Libre Baskerville', serif;
+  border-bottom: #8585e0 2px solid;
+}
+
+.postHeader h2 {
+  margin: 10px 0;
+}
+
+.postsContainer {
+  border: #8585e0 1px solid;
+  border-radius: 5px;
+  font-family: 'Gill Sans', sans-serif;
+  color: #4d4d4d;
+  margin: 10px 0;
+  padding: 5px 10px;
+}
+
+.postsContainer h3{
+  margin: 5px 0;
+}
+
+.postDate {
+  margin: 5px 0;
+  font-size: smaller;
+  color: #bfbfbf;
+}
+
+.postText {
+  margin: 5px -10px;
+  padding: 10px;
+  border-top: #bfbfbf 1px solid;
+
+}
+
+.repliesSection {
+  padding: 5px 10px;
+  color: #8585e0;
+  margin: 0 -10px;
+  background-color: #ebebfa;
+}
+
+.repliesSection p {
+  margin: 0;
+}
+
+.commentButton {
+  background: white;
+  color: #8585e0;
+  font-family: 'Gill Sans', sans-serif;
+  cursor: pointer;
+  margin-right: 10px;
+  border: #8585e0 1px solid;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
+.commentButton:hover {
+  color: #4d4d4d;
+  border: #4d4d4d 1px solid;
+}
+
+.commentInputSection {
+  margin: 10px 0;
+}
+
+.smallPostButton {
+  margin-right: 5px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-family: 'Gill Sans', sans-serif;
+}
+
+.commentContainer {
+  background-color: #ebebfa;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 10px 0;
+}
+
+.commentContainer h4 {
+  margin: 5px;
+  text-decoration: underline #4d4d4d;
+}
+
+.commentContainer p {
+  margin: 5px;
+  font-size: small;
+}
+
+.likesContainer {
+  color: #8585e0;
+  font-size: small;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.postUserInfo {
+  display: inline-block;
+}
+
+.editInput {
+  margin-right: 20px;
+}
