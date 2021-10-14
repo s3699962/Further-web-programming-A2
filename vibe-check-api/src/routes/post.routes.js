@@ -12,7 +12,7 @@ module.exports = (express, app) => {
   router.delete("/:id", controller.delete);
 
   // Update a post
-  router.update("/:id", controller.update);
+  router.put("/:id", controller.update);
 
   // Add routes to server.
   app.use("/api/posts", router);

@@ -580,6 +580,15 @@ footer {
   background-color: #ebebfa;
 }
 
+.commentName {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.commentLikeSection {
+  display: inline-block;
+}
+
 .repliesSection p {
   margin: 0;
 }
@@ -621,12 +630,14 @@ footer {
 
 .commentContainer h4 {
   margin: 5px;
-  text-decoration: underline #4d4d4d;
 }
 
 .commentContainer p {
   margin: 5px;
   font-size: small;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .likesContainer {

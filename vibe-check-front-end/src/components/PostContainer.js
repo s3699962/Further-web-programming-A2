@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from "react";
 import {formattedDate} from "./Utils";
-import {createComment, createLike, deleteLike, deletePost, updatePostsList} from "../data/repository";
+import {createComment, createPostLike, deletePostLike, deletePost, updatePostsList} from "../data/repository";
 import ConfirmationModal from "./ConfirmationModal";
 import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Buttons";
 import {CommentContainer} from "./CommentContainer";
 import {CommentInputSection, EditInputSection} from "./InputSections";
 
 function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
+
+  console.log("Currentpost", currentPost);
   const [enableEditPost, setEnableEditPost] = useState(false);
   const [comment, setComment] = useState("");
   const [editedPost, setEditedPost] = useState("");
@@ -14,7 +16,7 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   const [newCommentErrorMessage, setNewCommentErrorMessage] = useState(null);
   const [editPostErrorMessage, setEditPostErrorMessage] = useState(null);
   const [showCommentInput, setShowCommentInput] = useState(false);
-  const like = currentPost.likes.some(like => user.email === like.userEmail);
+  const like = currentPost.post_likes.some(like => user.email === like.userEmail);
 
   const handleInputChange = (event) => {
     const name = event.target.name;
@@ -57,7 +59,7 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
       const index = editedPostList.findIndex(post => post.id === currentPost.id);
       const post = editedPostList[index];
 
-      editedPostList[index].comments = [...post.comments, response];
+      editedPostList[index].comments = [...post.comments, {...response, user: {name: user.name}, comment_likes: []}];
       //update the posts list in state
       setPosts(editedPostList);
 
@@ -76,14 +78,14 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
 
     if (!like) {
       //create the like
-      const response = await createLike({userEmail: user.email, postId: currentPost.id});
-      editedPostList[index].likes = [...post.likes, response];
+      const response = await createPostLike({userEmail: user.email, postId: currentPost.id});
+      editedPostList[index].post_likes = [...post.post_likes, response];
 
     } else {
       //delete the like
-      const likeId = currentPost.likes.find(like => user.email === like.userEmail).id;
-      await deleteLike(likeId);
-      editedPostList[index].likes = editedPostList[index].likes.filter(like => like.id !== likeId)
+      const likeId = currentPost.post_likes.find(like => user.email === like.userEmail).id;
+      await deletePostLike(likeId);
+      editedPostList[index].post_likes = editedPostList[index].post_likes.filter(like => like.id !== likeId)
     }
     setPosts(editedPostList);
   };
@@ -112,7 +114,7 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   const handleDeletePost = async () => {
     setPosts(posts.filter(post => post.id !== currentPost.id));
     closeDeletePostModal();
-    //delete from localStorage
+    //delete from backend
     await deletePost(currentPost.id);
     clearEditState();
   };
@@ -172,7 +174,7 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
 
         <div className="repliesSection">
           <div className="likesContainer">
-            <i className="fa fa-heart"/> {currentPost.likes.length} Likes
+            <i className="fa fa-heart"/> {currentPost.post_likes.length} Likes
           </div>
           <SmallInvertedIconButton onClick={handlePostLike} type={"like"} value={like ? "Unlike" : "Like"}/>
           <SmallInvertedIconButton onClick={toggleCommentInput} type={"comment"} value={"Comment"}/>

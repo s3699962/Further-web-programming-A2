@@ -33,7 +33,7 @@ async function deleteUser(email) {
   return await axios.delete(API_HOST + `/api/users/${email}`);
 }
 
-//TODO: UpdateUserDetails
+// UpdateUserDetails
 async function updateUser(user) {
   return await axios.put(API_HOST + `/api/users/${user.email}`, user);
 }
@@ -71,16 +71,28 @@ async function deleteComment(id) {
 
 //TODO: updateComment(id)
 
-// ---- Like --------------------------------------------------------------------------------------
+// ---- Post Like --------------------------------------------------------------------------------------
 
-async function createLike(like) {
-  const response = await axios.post(API_HOST + "/api/like", like);
+async function createPostLike(like) {
+  const response = await axios.post(API_HOST + "/api/post-like", like);
 
   return response.data;
 }
 
-async function deleteLike(id) {
-  return await axios.delete(API_HOST + `/api/like/${id}`);
+async function deletePostLike(id) {
+  return await axios.delete(API_HOST + `/api/post-like/${id}`);
+}
+
+// ---- Comment Like --------------------------------------------------------------------------------------
+
+async function createCommentLike(like) {
+  const response = await axios.post(API_HOST + "/api/comment-like", like);
+
+  return response.data;
+}
+
+async function deleteCommentLike(id) {
+  return await axios.delete(API_HOST + `/api/comment-like/${id}`);
 }
 
 // ---- Follow ------------------------------------------------------------------------------------
@@ -113,10 +125,12 @@ export {
   removeUser,
   deletePost,
   createComment,
-  createLike,
+  createPostLike,
   deleteComment,
-  deleteLike,
-  updateUser
+  deletePostLike,
+  updateUser,
+  createCommentLike,
+  deleteCommentLike
 }
 
 

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define("like", {
+  sequelize.define("comment_like", {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,

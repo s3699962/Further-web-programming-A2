@@ -2,7 +2,7 @@ const db = require("../database");
 
 // Create a post in the database.
 exports.create = async (req, res) => {
-  const like = await db.like.create({
+  const like = await db.comment_like.create({
     userEmail: req.body.userEmail,
     postId: req.body.postId
   });
@@ -11,6 +11,6 @@ exports.create = async (req, res) => {
 };
 
 exports.delete = async(req, res) => {
-  await db.like.destroy({where: {id: req.params.id}});
+  await db.comment_like.destroy({where: {id: req.params.id}});
   res.json(null);
 };

@@ -1,19 +1,19 @@
 import React, {useState} from "react";
-import {DeleteIconButton, EditIconButton} from "./Buttons";
+import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Buttons";
 import ConfirmationModal from "./ConfirmationModal";
 import {EditInputSection} from "./InputSections";
-import {deleteComment, updatePostsList} from "../data/repository";
+import {createCommentLike, createPostLike, deleteComment, deleteCommentLike, deletePostLike, updatePostsList} from "../data/repository";
 
 /** This component is responsible for displaying a comment in a post and handling the comment
  * deletion and editing.
  * */
 
 export function CommentContainer({posts, setPosts, user, editedPost, currentComment, setServerError}) {
-
   const [editedComment, setEditedComment] = useState("");
   const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
   const [enableEditComment, setEnableEditComment] = useState(false);
   const [errorMessage, setEditCommentErrorMessage] = useState(null);
+  const like = currentComment.comment_likes.some(like => user.email === like.userEmail);
 
   /* text to pass to the confirmation modal component */
   const deleteCommentModalText = "Are you sure you want to delete this comment? It will be forever lost.";
@@ -72,6 +72,29 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
       }
   };
 
+  const handleCommentLike = async () => {
+    const editedPostList = [...posts];
+    const postIndex = editedPostList.findIndex(post => post.id === currentComment.postId);
+    const post = editedPostList[postIndex];
+
+    const commentIndex = post.comments.findIndex(comment => comment.id === currentComment.id);
+    const comment = post.comments[commentIndex];
+
+    if (!like) {
+      //create the like
+      const response = await createCommentLike({userEmail: user.email, commentId: currentComment.id});
+      editedPostList[postIndex].comments[commentIndex].comment_likes = [...comment.comment_likes, response];
+
+    } else {
+      //delete the like
+      const likeId = currentComment.comment_likes.find(like => user.email === like.userEmail).id;
+      await deleteCommentLike(likeId);
+      editedPostList[postIndex].comments[commentIndex].comment_likes =
+          editedPostList[postIndex].comments[commentIndex].comment_likes.filter(like => like.id !== likeId)
+    }
+    setPosts(editedPostList);
+  };
+
   const onCancelEditComment = () => {
       clearEditState();
   };
@@ -87,7 +110,15 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
       <div className="commentContainer">
         <div>
           <div className="postUserInfo">
-            <h4>{currentComment.user?.name}</h4>
+            <div className="commentName">
+              <h4>{currentComment.user?.name}</h4>
+            </div>
+            <div className="repliesSection commentLikeSection">
+              <div className="likesContainer">
+                <i className="fa fa-heart"/> {currentComment.comment_likes.length} Likes
+              </div>
+              <SmallInvertedIconButton onClick={handleCommentLike} type={"like"} value={like ? "Unlike" : "Like"}/>
+            </div>
           </div>
           {user.email === currentComment?.userEmail &&
           <div className="editContainer">

@@ -15,7 +15,8 @@ db.sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 db.user = require("./models/user.js")(db.sequelize, DataTypes);
 db.post = require("./models/post.js")(db.sequelize, DataTypes);
 db.comment = require("./models/comment.js")(db.sequelize, DataTypes);
-db.like = require("./models/like.js")(db.sequelize, DataTypes);
+db.post_like = require("./models/post_like.js")(db.sequelize, DataTypes);
+db.comment_like = require("./models/comment_like.js")(db.sequelize, DataTypes);
 
 //Relate the comment to post and user
 db.post.hasMany(db.comment, { onDelete: "cascade", onUpdate: "cascade", hooks: true });
@@ -23,11 +24,17 @@ db.user.hasMany(db.comment, { onDelete: "cascade", onUpdate: "cascade", hooks: t
 db.comment.belongsTo(db.post, { foreignKey: { allowNull: false } });
 db.comment.belongsTo(db.user, { foreignKey: { allowNull: false } });
 
-// Relate like to post and user
-db.post.hasMany(db.like, { onDelete: "cascade", onUpdate: "cascade", hooks: true });
-db.user.hasMany(db.like, { onDelete: "cascade", onUpdate: "cascade", hooks: true });
-db.like.belongsTo(db.post, { foreignKey: { allowNull: false } });
-db.like.belongsTo(db.user, { foreignKey: { allowNull: false } });
+// Relate post_like to post and user
+db.post.hasMany(db.post_like, { onDelete: "cascade", onUpdate: "cascade", hooks: true });
+db.user.hasMany(db.post_like, { onDelete: "cascade", onUpdate: "cascade", hooks: true });
+db.post_like.belongsTo(db.post, { foreignKey: { allowNull: false } });
+db.post_like.belongsTo(db.user, { foreignKey: { allowNull: false } });
+
+// Relate comment_like to comment and user
+db.comment.hasMany(db.comment_like, { onDelete: "cascade", onUpdate: "cascade", hooks: true });
+db.user.hasMany(db.comment_like, { onDelete: "cascade", onUpdate: "cascade", hooks: true });
+db.comment_like.belongsTo(db.comment, { foreignKey: { allowNull: false } });
+db.comment_like.belongsTo(db.user, { foreignKey: { allowNull: false } });
 
 //Relate post and user
 db.user.hasMany(db.post, { onDelete: "cascade", onUpdate: "cascade", hooks: true });
@@ -64,7 +71,9 @@ async function seedData() {
 
   await db.comment.create({ text: "Yes it's great!", userEmail: "jroga@gmail.com", postId: 1 });
 
-  await db.like.create({ userEmail: "jroga@gmail.com", postId: 1 })
+  await db.post_like.create({ userEmail: "jroga@gmail.com", postId: 1 });
+
+  await db.comment_like.create({ userEmail: "jroga@gmail.com", commentId: 1 });
 }
 
 module.exports = db;

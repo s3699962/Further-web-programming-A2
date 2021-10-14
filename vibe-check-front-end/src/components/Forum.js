@@ -62,8 +62,10 @@ function Forum(props) {
       //save to DB
       const response = await createPost(newPost);
 
+      const updatedResponse = {...response, user: {name: user.name}, post_likes: [], comments: []};
+
       // Save to state.
-      setPosts([...posts, response]);
+      setPosts([...posts, updatedResponse]);
       // Clear the state
       setPost("");
       setNewPostErrorMessage(null);

@@ -7,8 +7,8 @@ exports.all = async (req, res) => {
   const posts = await db.post.findAll({
     include: [
       db.user,
-      {model: db.comment, include: {model: db.user, attributes: ['name']}},
-      db.like
+      { model: db.comment, include: [{ model: db.user, attributes: ['name'] }, db.comment_like] },
+      db.post_like
     ]
   });
   res.json(posts);

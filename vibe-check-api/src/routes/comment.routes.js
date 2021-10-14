@@ -10,7 +10,7 @@ module.exports = (express, app) => {
   router.delete("/:id", controller.delete);
 
   // Edit a comment
-  router.update("/:id", controller.update);
+  router.put("/:id", controller.update);
 
   // Add routes to server.
   app.use("/api/comment", router);

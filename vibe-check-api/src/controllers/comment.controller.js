@@ -21,7 +21,6 @@ exports.create = async (req, res) => {
 //Delete a comment
 exports.delete = async(req, res) => {
   await db.comment.destroy({where: {id: req.params.id}});
-  console.log("HERERERE");
   res.json(null);
 };
 
