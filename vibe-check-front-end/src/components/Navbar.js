@@ -34,6 +34,12 @@ function Navbar(props) {
               Forum
             </div>
           </Link>
+          <Link className="nav-link" to="/friends">
+            <div className={activeTab === "friends" ? "activeNavTab linkContainer" : "linkContainer"} onClick={() => props.setActiveNavTab("friends")}>
+              <i className="fa fa-users"/>
+              Friends
+            </div>
+          </Link>
         </>
         }
         {props.user === null

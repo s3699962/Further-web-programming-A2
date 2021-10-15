@@ -38,3 +38,5 @@ exports.update = async (req, res) => {
   });
   res.json(null)
 };
+
+// exports.userPosts =

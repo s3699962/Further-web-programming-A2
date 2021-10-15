@@ -7,8 +7,6 @@ import {CommentContainer} from "./CommentContainer";
 import {CommentInputSection, EditInputSection} from "./InputSections";
 
 function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
-
-  console.log("Currentpost", currentPost);
   const [enableEditPost, setEnableEditPost] = useState(false);
   const [comment, setComment] = useState("");
   const [editedPost, setEditedPost] = useState("");

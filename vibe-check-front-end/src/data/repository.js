@@ -38,6 +38,12 @@ async function updateUser(user) {
   return await axios.put(API_HOST + `/api/users/${user.email}`, user);
 }
 
+// get all users
+async function getAllUsers() {
+  const response = await axios.get(API_HOST + `/api/users`);
+  return response.data;
+}
+
 // --- Post ---------------------------------------------------------------------------------------
 async function getPosts() {
   const response = await axios.get(API_HOST + "/api/posts");
@@ -97,9 +103,26 @@ async function deleteCommentLike(id) {
 
 // ---- Follow ------------------------------------------------------------------------------------
 
-//TODO: follow(follow)
+//follow a user
+async function createFollow(follow) {
+  const response = await axios.post(API_HOST + "/api/follow", follow);
 
-//TODO: unFollow(id)
+  return response.data;
+}
+//unFollow a user
+async function unfollow(id) {
+  return await axios.delete(API_HOST + `/api/follow/${id}`);
+}
+
+async function getAllFollowing(userEmail) {
+  const response = await axios.get(API_HOST + `/api/follow/${userEmail}`);
+  return response.data;
+}
+
+async function getFollowers(userEmail) {
+  const response = await axios.get(API_HOST + `/api/follow/followers/${userEmail}`);
+  return response.data;
+}
 
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
@@ -130,7 +153,12 @@ export {
   deletePostLike,
   updateUser,
   createCommentLike,
-  deleteCommentLike
+  deleteCommentLike,
+  getAllUsers,
+  getAllFollowing,
+  createFollow,
+  unfollow,
+  getFollowers
 }
 
 

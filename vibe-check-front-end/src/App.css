@@ -51,7 +51,7 @@ body{
 .navBar {
   overflow: hidden;
   background-color: #8585e0;
-  padding: 0 200px;
+  padding: 0 150px;
   display: block;
 }
 
@@ -178,6 +178,7 @@ footer {
   font-family: 'Gill Sans', sans-serif;
   color: #4d4d4d;
   font-size: 150%;
+  cursor: pointer;
 }
 
 .form-group {
@@ -604,6 +605,17 @@ footer {
   padding: 5px 10px;
 }
 
+.invertedCommentButton {
+  background-color: #8585e0;
+  color: white;
+}
+
+.invertedCommentButton:hover{
+  background-color: #adadeb !important;
+  color: #4d4d4d !important;
+  border: #adadeb 1px solid !important;
+}
+
 .commentButton:hover {
   color: #4d4d4d;
   border: #4d4d4d 1px solid;
@@ -653,4 +665,34 @@ footer {
 
 .editInput {
   margin-right: 20px;
+}
+
+.followRow {
+  padding: 15px 0;
+}
+
+.withBackGround {
+  background-color: #ebebfa;
+}
+
+.nameContainer {
+  display: inline-block;
+  min-width: 700px;
+  padding-left: 15px;
+  font-size: larger;
+}
+
+.followButtonContainer {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 5px
+}
+
+.toggledButton {
+  min-width: 100px;
+}
+
+.emailContainer {
+  font-size: small;
+  color: #4d4d4d;
 }

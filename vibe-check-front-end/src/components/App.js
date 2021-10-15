@@ -8,6 +8,7 @@ import Forum from "./Forum";
 import { getUser, removeUser} from "../data/repository";
 import './../App.css'
 import SignUpMenu from "./SignUpMenu";
+import Friends from "./Friends";
 
 /** The main App component. It defines the routes and what components will be rendered */
 function App() {
@@ -41,6 +42,9 @@ function App() {
               </Route>
               <Route path="/forum">
                 <Forum user={user} />
+              </Route>
+              <Route path="/friends">
+                <Friends user={user} />
               </Route>
               <Route path="/">
                 <Home user={user} />

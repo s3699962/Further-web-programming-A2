@@ -48,4 +48,11 @@ export function LargeMaxWidthButton({name, disabled, onSubmit, value}) {
   )
 }
 
+export function SmallToggledButton({inverted, onClick, value}) {
+  const className = inverted ? "commentButton toggledButton" : "commentButton invertedCommentButton toggledButton";
+  return (
+        <button className={className} onClick={onClick}>{value}</button>
+    )
+}
+
 
