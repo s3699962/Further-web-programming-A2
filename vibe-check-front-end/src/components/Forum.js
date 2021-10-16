@@ -56,6 +56,7 @@ function Forum(props) {
       setNewPostErrorMessage("Your post cannot be greater than 600 characters.");
       return;
     }
+    //Create a post object
     const newPost = {
       text     : sanitisedPost,
       dateTime : new Date(),
@@ -94,7 +95,7 @@ function Forum(props) {
               </div>
               {newPostErrorMessage !== null && <WarningMessage message={newPostErrorMessage}/>}
               <div>
-                <FileUploader onFileContentChanged={onFileContentChanged} forumUploadButton={true}/>
+                <FileUploader onFileContentChanged={onFileContentChanged} forumUploadButton={true} value={"Add an image"}/>
                 <div className="forumButtons">
                   <LargeButton type="cancelButton" value="Cancel" onClick={onCancel}/>
                   <LargeButton onClick={handleSubmit} value="Post" type="submitButton"/>

@@ -113,13 +113,12 @@ async function deleteCommentLike(id) {
 
 /** ---- Follow -------------------------------------------------------------------------------------- */
 
-//follow a user
 async function createFollow(follow) {
   const response = await axios.post(API_HOST + "/api/follow", follow);
 
   return response.data;
 }
-//unFollow a user
+
 async function unfollow(id) {
   return await axios.delete(API_HOST + `/api/follow/${id}`);
 }

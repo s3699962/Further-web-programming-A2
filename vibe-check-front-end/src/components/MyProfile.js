@@ -18,6 +18,7 @@ function MyProfile(props) {
   const [fileContent, setFileContent] = useState(null);
   const [errorState, setErrorState] = useState(false);
 
+  //add uploaded file content and save to database
   const onFileContentChanged = (fileContent) => {
     setFileContent(fileContent);
     addAvatar(fileContent)
@@ -41,6 +42,7 @@ function MyProfile(props) {
     props.logoutUser();
   };
 
+  //save avatar to database
   const addAvatar = async (fileContent) => {
     try {
       const response = await addAnAvatar(user.email, {image: fileContent});
@@ -57,6 +59,7 @@ function MyProfile(props) {
   const deleteMessage = "Are you sure you want to delete your account? Once successfully deleted, all your data will be lost."
 
   const avatarButtonText = user.avatarId ? "Change your avatar" : "Add an avatar";
+
   return (
       <div className={"bodyContainer"}>
         {errorState && <ErrorMessage errorMessage={serverErrorMessage}/>}
@@ -70,7 +73,7 @@ function MyProfile(props) {
               <div className="profileBody">
                 {user.avatarId
                     ? <div className="profileImage">
-                      <img className='image' height={"200px"} src={makeImageUrl(user.avatarId)}/>
+                      <img className='image' height={"128px"} src={makeImageUrl(user.avatarId)} alt={"profileImage"}/>
                     </div>
                     : <i className="fa fa-user-circle userImage"/>
                 }

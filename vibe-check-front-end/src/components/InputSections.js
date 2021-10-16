@@ -13,7 +13,7 @@ export function CommentInputSection({newCommentErrorMessage, onSubmit, onCancel,
                     placeholder={"Write a comment..."} value={comment} onChange={handleInputChange}/>
         </div>
         { newCommentErrorMessage !== null && <WarningMessage message={newCommentErrorMessage}/>}
-        <FileUploader onFileContentChanged={onFileContentChanged}/>
+        <FileUploader onFileContentChanged={onFileContentChanged} value={"Add an image"}/>
         <SmallButton type="submit" value={"Add Comment"} onClick={onSubmit} />
         <SmallButton type="cancel" value={"Cancel"} onClick={onCancel} />
       </div>

@@ -1,5 +1,3 @@
-const multer = require("multer");
-const upload = multer({ dest: 'uploads/' })
 
 module.exports = (express, app) => {
   const controller = require("../controllers/post.controller.js");
@@ -9,7 +7,7 @@ module.exports = (express, app) => {
   router.get("/", controller.all);
 
   // Create a new post.
-  router.post("/", upload.single('postImage'), controller.create);
+  router.post("/", controller.create);
 
   //Delete a post
   router.delete("/:id", controller.delete);

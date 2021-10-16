@@ -1,6 +1,7 @@
 const fs = require('fs');
 var uuid = require('uuid');
 
+// function to decode an uploaded image from base64 and save to local machine tmp folder
 module.exports = {
   convertImage (image) {
     if (!image) return null;

@@ -4,6 +4,8 @@ In this project I have :
 - used icons from Font Awesome (https://fontawesome.com/)
 - fonts from Google Fonts (https://fonts.google.com/)
 - Images from Unsplash (https://unsplash.com/)
+- used avatars from https://uifaces.co/
+- used starter code from RMIT COSC2758 lab and lectures code examples
 
 #Design choices
 Components have been separated depending on their functions and common code has been pulled out and implemented in a way that will make it reusable. E.g. buttons and utility functions.

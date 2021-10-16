@@ -81,6 +81,7 @@ exports.update = async(req, res) => {
   res.json(user);
 };
 
+// Update user with an uploaded avatar
 exports.addAvatar = async (req, res) => {
   const avatarId = convertImage(req.body.image);
   await db.user.update({ avatarId: avatarId}, { where: {email: req.params.email}});

@@ -4,8 +4,9 @@ import {serverErrorMessage} from "./Utils";
 import ErrorMessage from "./ErrorMessage";
 import {UserFollowTable} from "./UserFollowTable";
 
-/** Forum component responsible for handling new posts and comments,
- * and deleting and editing of posts and comments, by the signed in user on their own posts.
+/** Friends component to display user information in a table and
+ * whether they are followed. User can select all users, friends or followers
+ * which are seperated into tabs
  * */
 function Friends(props) {
   const currentUser = props.user;
@@ -14,13 +15,14 @@ function Friends(props) {
   const [followers, setFollowers] = useState([]);
   const [serverError, setServerError] = useState(false);
 
+  // Get users information from the database
   useEffect(() => {
     getAllUsers().then(setUsers);
     getAllFollowing(currentUser.email).then(setFriends);
     getFollowers(currentUser.email).then(setFollowers);
   }, []);
 
-
+  // default is all users tab
   const [activeTab, setActiveTab] = useState("allUsers");
 
   const setAllUsersActiveTab = () => setActiveTab("allUsers");
@@ -52,8 +54,6 @@ function Friends(props) {
         />
       </div>
   );
-
-
 }
 
 export default Friends;

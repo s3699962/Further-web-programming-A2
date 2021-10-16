@@ -222,6 +222,7 @@ footer {
 .profileImage {
   display: inline-block;
   padding-top: 5px;
+  min-width: 120px;
 }
 
 .uploadProfileImage {
@@ -231,6 +232,7 @@ footer {
 .userImage{
   padding: 5px 25px;
   font-size: 400% !important;
+  margin-top: 10px;
 }
 
 .profileHeader {
@@ -702,6 +704,7 @@ footer {
 
 .followRow {
   padding: 15px 0;
+  min-height: 89px;
 }
 
 .withBackGround {
@@ -714,11 +717,11 @@ footer {
   padding-left: 15px;
   font-size: larger;
   vertical-align: top;
-  margin-top: 18px;
+  margin-top: 25px;
 }
 
 .extraPadded {
-  margin-top: 37px !important;
+  margin-top: 26px !important;
 }
 
 .image {
@@ -727,13 +730,14 @@ footer {
 
 .followRowImage {
   margin: 0 20px;
+  max-width: 75px;
 }
 
 .followButtonContainer {
   display: inline-block;
   float: right;
   vertical-align: top;
-  margin-top: 18px;
+  margin-top: 30px;
 }
 
 .toggledButton {

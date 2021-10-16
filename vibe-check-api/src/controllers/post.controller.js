@@ -28,11 +28,13 @@ exports.create = async (req, res) => {
   res.json(post);
 };
 
+//delete a post (which will also delete any comments and likes)
 exports.delete = async (req, res) => {
   await db.post.destroy({where: {id: req.params.id}});
   res.json(null);
 };
 
+// updates to post text
 exports.update = async (req, res) => {
   const post = await db.post.update({
     text: req.body.text,

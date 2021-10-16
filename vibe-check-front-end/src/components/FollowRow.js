@@ -3,6 +3,9 @@ import React, {useState} from "react";
 import ConfirmationModal from "./ConfirmationModal";
 import {SmallToggledButton} from "./Buttons";
 
+/** The component is used to display user information and whether they are followed
+ * in individual rows in the friends table section
+ * */
 export function FollowRow({user, index, allFriends, setFriends, setServiceError, currentUser, setServerError}) {
   const [showUnfollowModal, setShowUnfollowModal] = useState(false);
   const openUnfollowModal = () => setShowUnfollowModal(true);
@@ -22,6 +25,7 @@ export function FollowRow({user, index, allFriends, setFriends, setServiceError,
         setFriends([...allFriends, response])
       }
     } catch (error) {
+      //catch any errors and display the error banner in the parent
       setServerError(true);
       closeUnfollowModal();
     }
@@ -30,15 +34,16 @@ export function FollowRow({user, index, allFriends, setFriends, setServiceError,
   const unfollowModalText = "Are you sure you want to unfollow your friend?";
   const unfollowModalHeader = "Unfollow";
 
+  //set classNames for styling
   const nameContainerClassName = user.avatarId ? "nameContainer extraPadded" : "nameContainer";
   const followButtonContainerClassName = user.avatarId ? "followButtonContainer extraPadded" : "followButtonContainer";
-
   const className = (index % 2 === 1) ? 'followRow withBackGround' : 'followRow';
+
   return (
       <div className={className}>
         {user.avatarId
             ? <div className="profileImage">
-              <img className='followRowImage' height={"100px"} width={"75px"} src={makeImageUrl(user.avatarId)}/>
+              <img className='followRowImage' height={"80"} src={makeImageUrl(user.avatarId)}/>
             </div>
             : <i className="fa fa-user-circle userImage"/>
         }
@@ -50,6 +55,7 @@ export function FollowRow({user, index, allFriends, setFriends, setServiceError,
           <SmallToggledButton inverted={user.following} value={user.following ? "Following" : "Follow"}
                               onClick={user.following ? openUnfollowModal : handleFollow}/>
         </div>
+        {/* This confirmation modal pops up to confirm an unfollow friend */}
         <ConfirmationModal
             message={unfollowModalText}
             headerText={unfollowModalHeader}
@@ -57,7 +63,6 @@ export function FollowRow({user, index, allFriends, setFriends, setServiceError,
             closeModal={closeUnfollowModal}
             onSubmit={handleFollow}
         />
-
       </div>
   )
 }

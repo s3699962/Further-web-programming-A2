@@ -6,6 +6,9 @@ import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Butto
 import {CommentContainer} from "./CommentContainer";
 import {CommentInputSection, EditInputSection} from "./InputSections";
 
+/** Component is used to manage displaying a post information along with
+ * likes and comments.
+ * */
 function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   const [enableEditPost, setEnableEditPost] = useState(false);
   const [comment, setComment] = useState("");
@@ -17,6 +20,7 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   const [fileContent, setFileContent] = useState(null);
   const like = currentPost.post_likes.some(like => user.email === like.userEmail);
 
+  //Handle uploaded file content
   const onFileContentChanged = (fileContent) => {
     setFileContent(fileContent)
   };
@@ -65,13 +69,9 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
       const index = editedPostList.findIndex(post => post.id === currentPost.id);
       const post = editedPostList[index];
 
-      console.log("response", response);
-
       editedPostList[index].comments = [...post.comments, {...response, user: {name: user.name}, comment_likes: []}];
       //update the posts list in state
       setPosts(editedPostList);
-
-      console.log("edited", editedPostList);
 
       setComment("");
       setShowCommentInput(false);
@@ -165,7 +165,7 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
         <div>
           <div className="postUserInfo">
             <h3 className="text-primary">
-              <i className="fa fa-user-circle userImage"/> {currentPost.user.name}
+              <i className="fa fa-user-circle"/> {currentPost.user.name}
             </h3>
             <p className="postDate">{formattedDate(currentPost.dateTime)}</p>
           </div>

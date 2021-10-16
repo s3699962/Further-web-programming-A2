@@ -1,24 +1,33 @@
 import React from 'react';
 import {UploadButton} from "./Buttons";
 
-
+/** This component is to manage the uploading of files for the forum posts
+ * and comments, and profile avatars.
+ * */
 const FileUploader = ({onFileContentChanged, forumUploadButton, value}) => {
   // Create a reference to the hidden file input element
   const hiddenFileInput = React.useRef(null);
 
-  // Programatically click the hidden file input element
-  // when the Button component is clicked
+  // click the hidden file input element
+  // when the UploadButton is clicked
   const handleClick = event => {
     event.preventDefault();
     hiddenFileInput.current.click();
   };
-  // Call a function (passed as a prop from the parent component)
-  // to handle the user-selected file 
+
+  // function to handle the user-selected file
   const handleChange = event => {
+    //This is if no file is selected and the upload was cancelled
+    if (event.target.files.length === 0) {
+      onFileContentChanged(null);
+      return
+    }
+    // convert image to base64
     event.target.files[0].arrayBuffer().then(text => {
       onFileContentChanged(new Buffer(text).toString("base64"));
     });
   };
+
   return (
       <>
         <UploadButton onClick={handleClick} value={value} forumUploadButton={forumUploadButton}/>
@@ -31,5 +40,5 @@ const FileUploader = ({onFileContentChanged, forumUploadButton, value}) => {
         />
       </>
   );
-}
+};
 export default FileUploader;
