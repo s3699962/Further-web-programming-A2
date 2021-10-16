@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from "react";
-import {formattedDate} from "./Utils";
-import {createComment, createPostLike, deletePostLike, deletePost, updatePostsList} from "../data/repository";
+import React, {useState} from "react";
+import {formattedDate, sanitize} from "./Utils";
+import {createComment, createPostLike, deletePostLike, deletePost, updatePost} from "../data/repository";
 import ConfirmationModal from "./ConfirmationModal";
 import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Buttons";
 import {CommentContainer} from "./CommentContainer";
@@ -9,7 +9,7 @@ import {CommentInputSection, EditInputSection} from "./InputSections";
 function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   const [enableEditPost, setEnableEditPost] = useState(false);
   const [comment, setComment] = useState("");
-  const [editedPost, setEditedPost] = useState("");
+  const [editedPost, setEditedPost] = useState(currentPost.text);
   const [showDeletePostModal, setShowDeletePostModal] = useState(false);
   const [newCommentErrorMessage, setNewCommentErrorMessage] = useState(null);
   const [editPostErrorMessage, setEditPostErrorMessage] = useState(null);
@@ -39,15 +39,17 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   };
 
   const handleAddComment = async () => {
-    // Trim the post text.
-    if (comment.trim() === "") {
+    // Trim and sanitise the comment text.
+    const sanitisedComment = sanitize(comment.trim());
+
+    if (sanitisedComment === "") {
       setNewCommentErrorMessage("Your comment is empty. Please enter a message or press cancel.");
       return;
     }
 
     const newComment = {
       userEmail: user.email,
-      text     : comment,
+      text     : sanitisedComment,
       postId   : currentPost.id
     };
     try {
@@ -74,36 +76,47 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
     const index = editedPostList.findIndex(post => post.id === currentPost.id);
     const post = editedPostList[index];
 
-    if (!like) {
-      //create the like
-      const response = await createPostLike({userEmail: user.email, postId: currentPost.id});
-      editedPostList[index].post_likes = [...post.post_likes, response];
+    try {
+      if (!like) {
+        //create the like
+        const response = await createPostLike({userEmail: user.email, postId: currentPost.id});
+        editedPostList[index].post_likes = [...post.post_likes, response];
 
-    } else {
-      //delete the like
-      const likeId = currentPost.post_likes.find(like => user.email === like.userEmail).id;
-      await deletePostLike(likeId);
-      editedPostList[index].post_likes = editedPostList[index].post_likes.filter(like => like.id !== likeId)
+      } else {
+        //delete the like
+        const likeId = currentPost.post_likes.find(like => user.email === like.userEmail).id;
+        await deletePostLike(likeId);
+        editedPostList[index].post_likes = editedPostList[index].post_likes.filter(like => like.id !== likeId)
+      }
+      setPosts(editedPostList);
+    } catch (error) {
+      setServerError(true);
     }
-    setPosts(editedPostList);
   };
 
   const onCancelEditPost = () => {
     clearEditState();
   };
 
-  //TODO
-  const handleEditPost = () => {
-    if (editedPost.trim() === "") {
+  const handleEditPost = async () => {
+
+    // Trim and sanitise the comment text.
+    const sanitisedPost = sanitize(editedPost.trim());
+
+    if (sanitisedPost === "") {
       setEditPostErrorMessage("Your post is empty. Please enter a message, or you can cancel or delete the post.");
       return;
     }
     const editedPostList = [...posts];
     const index = editedPostList.findIndex(post => post.id === currentPost.id);
-    editedPostList[index].text = editedPost;
-    setPosts(editedPostList);
-    //update the posts in localStorage
-    updatePostsList(posts[index]);
+    editedPostList[index].text = sanitisedPost;
+
+    try {
+      await updatePost({text: sanitisedPost}, currentPost.id);
+      setPosts(editedPostList);
+    } catch(error) {
+      setServerError(true);
+    }
 
     //clear the state
     clearEditState();
@@ -112,13 +125,18 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   const handleDeletePost = async () => {
     setPosts(posts.filter(post => post.id !== currentPost.id));
     closeDeletePostModal();
-    //delete from backend
-    await deletePost(currentPost.id);
+    try {
+      //delete from backend
+      await deletePost(currentPost.id);
+
+    } catch (error) {
+      setServerError(true);
+    }
     clearEditState();
   };
 
   const clearEditState = () => {
-    setEditedPost("");
+    setEditedPost(currentPost.text);
     setEnableEditPost(false);
     clearErrorMessages();
   };

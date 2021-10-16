@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
 import {createPost, getPosts} from "../data/repository";
 import WarningMessage from "./WarningMessage";
-import {LargeButton} from "./Buttons";
+import {LargeButton, UploadImageButton} from "./Buttons";
 import PostContainer from "./PostContainer";
-import {serverErrorMessage} from "./Utils";
+import {sanitize, serverErrorMessage} from "./Utils";
 import ErrorMessage from "./ErrorMessage";
 
 /** Forum component responsible for handling new posts and comments,
@@ -17,7 +17,7 @@ function Forum(props) {
   const [serverError, setServerError] = useState(false);
 
   useEffect(() => {
-      getPosts().then(setPosts);
+    getPosts().then(setPosts);
   }, []);
 
   //handle inputing of new posts
@@ -38,10 +38,10 @@ function Forum(props) {
     event.preventDefault();
 
     // Trim the post text.
-    const postTrimmed = post.trim();
+    const sanitisedPost = sanitize(post.trim());
 
     // sets a warning message to be displayed when validation fails
-    if (postTrimmed === "") {
+    if (sanitisedPost === "") {
       setNewPostErrorMessage("Your post is empty. Please enter a message or press cancel.");
       return;
     }
@@ -50,12 +50,11 @@ function Forum(props) {
       setNewPostErrorMessage("Your post cannot be greater than 600 characters.");
       return;
     }
-
     const newPost = {
-      text      : postTrimmed,
-      dateTime  : new Date(),
-      userEmail : user.email,
-      user      : user
+      text     : sanitisedPost,
+      dateTime : new Date(),
+      userEmail: user.email,
+      user     : user
     };
 
     try {
@@ -69,7 +68,7 @@ function Forum(props) {
       // Clear the state
       setPost("");
       setNewPostErrorMessage(null);
-    } catch(error) {
+    } catch (error) {
       setServerError(true);
     }
   };
@@ -87,10 +86,12 @@ function Forum(props) {
                         value={post} onChange={handleInputChange}/>
               </div>
               {newPostErrorMessage !== null && <WarningMessage message={newPostErrorMessage}/>}
-
-              <div className="forumButtons">
-                <LargeButton type="cancelButton" value="Cancel" onClick={onCancel}/>
-                <LargeButton onClick={handleSubmit} value="Post" type="submitButton"/>
+              <div>
+                <UploadImageButton onClick={null} value="Add an image"/>
+                <div className="forumButtons">
+                  <LargeButton type="cancelButton" value="Cancel" onClick={onCancel}/>
+                  <LargeButton onClick={handleSubmit} value="Post" type="submitButton"/>
+                </div>
               </div>
             </fieldset>
           </form>

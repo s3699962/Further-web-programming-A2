@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {emailPattern, namePattern, passwordPattern, userInfoErrorMessages} from "./Utils";
+import {emailPattern, namePattern, passwordPattern, sanitize, userInfoErrorMessages} from "./Utils";
 import {FormInputSection} from "./InputSections";
 import {LargeMaxWidthButton} from "./Buttons";
 import {findUser} from "../data/repository";
@@ -18,43 +18,33 @@ export const UserInfoForm = ({userInfo, handleInputChange, onSubmit, isEdit, onC
   const [passwordError, setPasswordError] = useState(null);
 
   const validateEmail = async () => {
-    if (userInfo.email) {
-      if (!emailPattern.test(userInfo.email)) {
-        setIsValidEmail(false);
-        setEmailErrors(userInfoErrorMessages.emailFormatInvalid);
-      } else if (await findUser(userInfo.email) !== null) {
 
-        setIsValidEmail(false);
-        setEmailErrors(userInfoErrorMessages.emailDuplicated)
-      } else {
-        setIsValidEmail(true);
-        setEmailErrors(null);
-      }
-    } else {
-      setIsValidEmail(true);
-      setEmailErrors(null);
+    const sanitisedValue = sanitize(userInfo.email);
+
+    const emailIsValid = !userInfo.email || emailPattern.test(sanitisedValue);
+
+    setIsValidEmail(emailIsValid);
+    setEmailErrors(emailIsValid ? null : userInfoErrorMessages.emailFormatInvalid);
+
+    //check if the email is duplicated
+    if (emailIsValid && await findUser(sanitisedValue) !== null) {
+      setIsValidEmail(false);
+      setEmailErrors(userInfoErrorMessages.emailDuplicated)
     }
   };
 
   const validateName = () => {
-    //TODO:maybe needs additional error for when its empty
-    if (userInfo.name && !namePattern.test(userInfo.name)) {
-      setIsValidName(false);
-      setNameErrors(userInfoErrorMessages.nameFormatInvalid);
-    } else {
-      setIsValidName(true);
-      setNameErrors(null)
-    }
+    const nameIsValid = !userInfo.name || namePattern.test(sanitize(userInfo.name));
+
+    setIsValidName(nameIsValid);
+    setNameErrors(nameIsValid ? null : userInfoErrorMessages.nameFormatInvalid);
   };
 
-  const validatePassword = () =>  {
-    if (userInfo.password && !passwordPattern.test(userInfo.password)) {
-      setIsValidPassword(false);
-      setPasswordError(userInfoErrorMessages.passwordFormatInvalid);
-    } else {
-      setIsValidPassword(true);
-      setPasswordError(null)
-    }
+  const validatePassword = () => {
+    const passwordIsValid = !userInfo.password || passwordPattern.test(sanitize(userInfo.password));
+
+    setIsValidPassword(passwordIsValid);
+    setPasswordError(passwordIsValid ? null : userInfoErrorMessages.passwordFormatInvalid);
   };
 
   // disable button until valid info entered

@@ -49,6 +49,7 @@ exports.delete = async (req, res) => {
 
 // Update user details
 exports.update = async(req, res) => {
+  console.log("user", req.params.email);
 
   let user;
   //if password is not being changed no need to update it

@@ -3,7 +3,7 @@ import {updateUser} from "../data/repository";
 import ConfirmationModal from "./ConfirmationModal";
 import {UserInfoForm} from "./UserInfoForm";
 import ErrorMessage from "./ErrorMessage";
-import {serverErrorMessage} from "./Utils";
+import {sanitize, serverErrorMessage} from "./Utils";
 
 /** This component handles the editing of user information. It is rendered
  * when the user clicks the edit button in their profile.
@@ -31,6 +31,7 @@ function EditUserForm(props) {
 
     // Update field and state.
     temp[name] = value;
+
     setNewUserInfo(temp);
     setIsDirtied(true);
   };
@@ -53,7 +54,7 @@ function EditUserForm(props) {
 
     //updating in DB
     try {
-      await updateUser(newUserInfo);
+      await updateUser(newUserInfo, currentUser.email);
       props.loginUser(newUserInfo);
       //return to the profile on submit
       props.closeEditForm()

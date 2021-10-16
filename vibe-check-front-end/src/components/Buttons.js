@@ -33,6 +33,15 @@ export function DeleteIconButton({onClick}) {
   )
 }
 
+export function UploadImageButton({onClick, value}) {
+  return (
+      <button className="commentButton addPostButton" onClick={onClick}>
+        <i className="fa fa-camera editImage"/>
+        &nbsp;{value}
+      </button>
+  )
+}
+
 export function SmallInvertedIconButton({onClick, type, value}) {
   const icon = (type === "like") ? "fa fa-heart" : "fa fa-comment";
   return (

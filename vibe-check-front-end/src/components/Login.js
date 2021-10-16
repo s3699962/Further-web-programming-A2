@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {getUser, verifyUser} from "../data/repository";
 import ErrorMessage from "./ErrorMessage";
-import {emailPattern, serverErrorMessage, userInfoErrorMessages} from "./Utils";
+import {emailPattern, sanitize, serverErrorMessage, userInfoErrorMessages} from "./Utils";
 import {FormInputSection} from "./InputSections";
 
 /** Login component that handles the login info and validates the inputs */
@@ -28,14 +28,14 @@ function Login(props) {
   };
 
   const validateEmail = () => fields.email
-      ? setIsValidEmail(emailPattern.test(fields.email))
+      ? setIsValidEmail(emailPattern.test(sanitize(fields.email)))
       : setIsValidEmail(true);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const user = await verifyUser(fields.email, fields.password);
+      const user = await verifyUser(sanitize(fields.email), sanitize(fields.password));
 
       // If verified login the user.
       if (user !== null) {

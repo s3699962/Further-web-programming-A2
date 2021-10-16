@@ -2,14 +2,15 @@ import React, {useState} from "react";
 import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Buttons";
 import ConfirmationModal from "./ConfirmationModal";
 import {EditInputSection} from "./InputSections";
-import {createCommentLike, createPostLike, deleteComment, deleteCommentLike, deletePostLike, updatePostsList} from "../data/repository";
+import {createCommentLike, deleteComment, deleteCommentLike, updateComment} from "../data/repository";
+import {sanitize} from "./Utils";
 
 /** This component is responsible for displaying a comment in a post and handling the comment
  * deletion and editing.
  * */
 
 export function CommentContainer({posts, setPosts, user, editedPost, currentComment, setServerError}) {
-  const [editedComment, setEditedComment] = useState("");
+  const [editedComment, setEditedComment] = useState(currentComment.text);
   const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
   const [enableEditComment, setEnableEditComment] = useState(false);
   const [errorMessage, setEditCommentErrorMessage] = useState(null);
@@ -31,9 +32,9 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
   const toggleEditComment = () => setEnableEditComment(!enableEditComment);
 
   /* handles the editing of a comment*/
-  //TODO
-  const handleEditComment = () => {
-    if (editedComment.trim() === "") {
+  const handleEditComment = async () => {
+    const sanitisedComment = sanitize(editedComment);
+    if (sanitisedComment === "") {
       setEditCommentErrorMessage("Your comment is empty. Please enter a message, or you can cancel or delete the comment.");
       return;
     }
@@ -41,12 +42,16 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
     const postIndex = editedPostList.findIndex(post => post.id === editedPost.id);
     const post = editedPostList[postIndex];
     const commentIndex = post.comments.findIndex(comment => comment.id === currentComment.id);
-    editedPostList[postIndex].comments[commentIndex].comment = editedComment;
+    editedPostList[postIndex].comments[commentIndex].text = sanitisedComment;
 
-    setPosts(editedPostList);
-    //update the posts in localStorage
-    updatePostsList(posts[postIndex]);
-
+    try {
+      //add to backend DB
+      await updateComment({text: sanitisedComment}, currentComment.id);
+      //update the posts in state
+      setPosts(editedPostList);
+    } catch (error) {
+      setServerError(true);
+    }
     //clear the state
     clearEditState();
   };
@@ -80,19 +85,23 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
     const commentIndex = post.comments.findIndex(comment => comment.id === currentComment.id);
     const comment = post.comments[commentIndex];
 
-    if (!like) {
-      //create the like
-      const response = await createCommentLike({userEmail: user.email, commentId: currentComment.id});
-      editedPostList[postIndex].comments[commentIndex].comment_likes = [...comment.comment_likes, response];
+    try {
+      if (!like) {
+        //create the like
+        const response = await createCommentLike({userEmail: user.email, commentId: currentComment.id});
+        editedPostList[postIndex].comments[commentIndex].comment_likes = [...comment.comment_likes, response];
 
-    } else {
-      //delete the like
-      const likeId = currentComment.comment_likes.find(like => user.email === like.userEmail).id;
-      await deleteCommentLike(likeId);
-      editedPostList[postIndex].comments[commentIndex].comment_likes =
-          editedPostList[postIndex].comments[commentIndex].comment_likes.filter(like => like.id !== likeId)
+      } else {
+        //delete the like
+        const likeId = currentComment.comment_likes.find(like => user.email === like.userEmail).id;
+        await deleteCommentLike(likeId);
+        editedPostList[postIndex].comments[commentIndex].comment_likes =
+            editedPostList[postIndex].comments[commentIndex].comment_likes.filter(like => like.id !== likeId)
+      }
+      setPosts(editedPostList);
+    } catch(error) {
+      setServerError(true);
     }
-    setPosts(editedPostList);
   };
 
   const onCancelEditComment = () => {
@@ -101,7 +110,7 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
 
   /* clears all the variables for editing a comment */
   const clearEditState = () => {
-    setEditedComment("");
+    setEditedComment(currentComment.text);
     setEnableEditComment(false);
     setEditCommentErrorMessage(null);
   };
@@ -143,7 +152,7 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
                 onCancel={onCancelEditComment}
                 handleInputChange={handleInputChange}
                 editedValue={editedComment}
-                initialText={currentComment.comment}
+                initialText={currentComment.text}
                 submitButtonText={"Edit Comment"}
                 inputName={"editedComment"}
             />

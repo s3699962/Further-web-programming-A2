@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {createUser, findUser, getUser} from "../data/repository";
+import {createUser} from "../data/repository";
 import {UserInfoForm} from "./UserInfoForm";
 
 /** Sign up component including a form for name, email and password */

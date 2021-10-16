@@ -31,12 +31,11 @@ exports.delete = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  await db.post.update({
+  console.log("request");
+  const post = await db.post.update({
     text: req.body.text,
   }, {
     where: {id: req.params.id}
   });
-  res.json(null)
+  res.json(post)
 };
-
-// exports.userPosts =
