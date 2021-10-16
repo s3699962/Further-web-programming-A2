@@ -44,6 +44,11 @@ async function getAllUsers() {
   return response.data;
 }
 
+async function addAnAvatar(email, avatar) {
+  const response = await axios.put(API_HOST + `/api/users/avatar/${email}`, avatar);
+  return response.data;
+}
+
 /** --- Post ----------------------------------------------------------------------------------------- */
 
 async function getPosts() {
@@ -143,7 +148,12 @@ function removeUser() {
   localStorage.removeItem(USER_KEY);
 }
 
+function makeImageUrl(id) {
+  return API_HOST + `/api/images/${id}`
+}
+
 export {
+  setUser,
   verifyUser,
   findUser,
   createUser,
@@ -166,5 +176,7 @@ export {
   unfollow,
   getFollowers,
   updatePost,
-  updateComment
+  updateComment,
+  makeImageUrl,
+  addAnAvatar
 }

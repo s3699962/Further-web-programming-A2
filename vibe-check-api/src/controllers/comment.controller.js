@@ -1,3 +1,5 @@
+const {convertImage} = require("./Utils");
+
 const db = require("../database");
 
 // Select all posts from the database.
@@ -12,7 +14,8 @@ exports.create = async (req, res) => {
   const comments = await db.comment.create({
     text: req.body.text,
     userEmail: req.body.userEmail,
-    postId: req.body.postId
+    postId: req.body.postId,
+    imageId: convertImage(req.body.image)
   });
 
   res.json(comments);

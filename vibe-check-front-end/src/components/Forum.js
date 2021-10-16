@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react";
 import {createPost, getPosts} from "../data/repository";
 import WarningMessage from "./WarningMessage";
-import {LargeButton, UploadImageButton} from "./Buttons";
+import {LargeButton, UploadButton} from "./Buttons";
 import PostContainer from "./PostContainer";
 import {sanitize, serverErrorMessage} from "./Utils";
 import ErrorMessage from "./ErrorMessage";
+import FileUploader from "./FileUploader";
 
 /** Forum component responsible for handling new posts and comments,
  * and deleting and editing of posts and comments, by the signed in user on their own posts.
@@ -15,6 +16,11 @@ function Forum(props) {
   const [posts, setPosts] = useState(null);
   const [newPostErrorMessage, setNewPostErrorMessage] = useState(null);
   const [serverError, setServerError] = useState(false);
+  const [fileContent, setFileContent] = useState(null);
+
+  const onFileContentChanged = (fileContent) => {
+    setFileContent(fileContent)
+  };
 
   useEffect(() => {
     getPosts().then(setPosts);
@@ -54,14 +60,15 @@ function Forum(props) {
       text     : sanitisedPost,
       dateTime : new Date(),
       userEmail: user.email,
-      user     : user
+      user     : user,
+      image    : fileContent
     };
 
     try {
       //save to DB
       const response = await createPost(newPost);
 
-      const updatedResponse = {...response, user: {name: user.name}, post_likes: [], comments: []};
+      const updatedResponse = {...response, image: fileContent, user: {name: user.name}, post_likes: [], comments: []};
 
       // Save to state.
       setPosts([...posts, updatedResponse]);
@@ -87,7 +94,7 @@ function Forum(props) {
               </div>
               {newPostErrorMessage !== null && <WarningMessage message={newPostErrorMessage}/>}
               <div>
-                <UploadImageButton onClick={null} value="Add an image"/>
+                <FileUploader onFileContentChanged={onFileContentChanged} forumUploadButton={true}/>
                 <div className="forumButtons">
                   <LargeButton type="cancelButton" value="Cancel" onClick={onCancel}/>
                   <LargeButton onClick={handleSubmit} value="Post" type="submitButton"/>

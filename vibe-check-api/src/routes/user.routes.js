@@ -18,7 +18,11 @@ module.exports = (express, app) => {
   router.delete("/:email", controller.delete);
 
   // Update a user
-  router.put("/:email", controller.update)
+  router.put("/:email", controller.update);
+
+  // Add an avatar
+  router.put("/avatar/:email", controller.addAvatar);
+
   // Add routes to server.
   app.use("/api/users", router);
 };

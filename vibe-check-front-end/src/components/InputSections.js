@@ -1,10 +1,11 @@
 import React from "react";
-import {SmallButton} from "./Buttons";
+import {SmallButton, UploadButton} from "./Buttons";
 import WarningMessage from "./WarningMessage";
 import ErrorMessage from "./ErrorMessage";
+import FileUploader from "./FileUploader";
 
 /** This is the input component for adding new comments*/
-export function CommentInputSection({newCommentErrorMessage, onSubmit, onCancel, handleInputChange, comment}) {
+export function CommentInputSection({newCommentErrorMessage, onSubmit, onCancel, handleInputChange, comment, onFileContentChanged}) {
   return (
       <div className="commentInputSection">
         <div className="postInputContainer" >
@@ -12,6 +13,7 @@ export function CommentInputSection({newCommentErrorMessage, onSubmit, onCancel,
                     placeholder={"Write a comment..."} value={comment} onChange={handleInputChange}/>
         </div>
         { newCommentErrorMessage !== null && <WarningMessage message={newCommentErrorMessage}/>}
+        <FileUploader onFileContentChanged={onFileContentChanged}/>
         <SmallButton type="submit" value={"Add Comment"} onClick={onSubmit} />
         <SmallButton type="cancel" value={"Cancel"} onClick={onCancel} />
       </div>

@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) =>
     dateJoined: {
       type: DataTypes.STRING(40),
       allowNull: false
+    },
+    avatarId: {
+      type: DataTypes.STRING(200),
+      allowNull: true
     }
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).

@@ -51,6 +51,7 @@ function EditUserForm(props) {
     }
 
     newUserInfo.dateJoined = currentUser.dateJoined;
+    newUserInfo.avatarId = currentUser.avatarId;
 
     //updating in DB
     try {

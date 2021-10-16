@@ -33,9 +33,11 @@ export function DeleteIconButton({onClick}) {
   )
 }
 
-export function UploadImageButton({onClick, value}) {
+export function UploadButton({onClick, value, forumUploadButton}) {
+
+  const className = forumUploadButton ? "commentButton addPostButton forumUploadButton" : "commentButton addPostButton";
   return (
-      <button className="commentButton addPostButton" onClick={onClick}>
+      <button className={className} onClick={onClick}>
         <i className="fa fa-camera editImage"/>
         &nbsp;{value}
       </button>

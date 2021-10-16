@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {formattedDate, sanitize} from "./Utils";
-import {createComment, createPostLike, deletePostLike, deletePost, updatePost} from "../data/repository";
+import {createComment, createPostLike, deletePostLike, deletePost, updatePost, makeImageUrl} from "../data/repository";
 import ConfirmationModal from "./ConfirmationModal";
 import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Buttons";
 import {CommentContainer} from "./CommentContainer";
@@ -14,7 +14,12 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   const [newCommentErrorMessage, setNewCommentErrorMessage] = useState(null);
   const [editPostErrorMessage, setEditPostErrorMessage] = useState(null);
   const [showCommentInput, setShowCommentInput] = useState(false);
+  const [fileContent, setFileContent] = useState(null);
   const like = currentPost.post_likes.some(like => user.email === like.userEmail);
+
+  const onFileContentChanged = (fileContent) => {
+    setFileContent(fileContent)
+  };
 
   const handleInputChange = (event) => {
     const name = event.target.name;
@@ -50,7 +55,8 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
     const newComment = {
       userEmail: user.email,
       text     : sanitisedComment,
-      postId   : currentPost.id
+      postId   : currentPost.id,
+      image    : fileContent
     };
     try {
       const response = await createComment(newComment);
@@ -59,9 +65,13 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
       const index = editedPostList.findIndex(post => post.id === currentPost.id);
       const post = editedPostList[index];
 
+      console.log("response", response);
+
       editedPostList[index].comments = [...post.comments, {...response, user: {name: user.name}, comment_likes: []}];
       //update the posts list in state
       setPosts(editedPostList);
+
+      console.log("edited", editedPostList);
 
       setComment("");
       setShowCommentInput(false);
@@ -173,7 +183,6 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
               onSubmit={handleDeletePost}
           />
         </div>
-
         {enableEditPost
             ? <EditInputSection
                 errorMessage={editPostErrorMessage}
@@ -185,7 +194,10 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
                 submitButtonText={"Edit Post"}
                 inputName={"editedPost"}
             />
-            : <p className="postText">"{currentPost.text}"</p>
+            : <>
+              <p className="postText">"{currentPost.text}"</p>
+              {currentPost.imageId && <img className='image' height={"400"} src={makeImageUrl(currentPost.imageId)}/>}
+            </>
         }
 
         <div className="repliesSection">
@@ -202,6 +214,7 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
             onSubmit={() => handleAddComment(currentPost.id)}
             onCancel={() => toggleCommentInput(currentPost.id)}
             handleInputChange={handleInputChange}
+            onFileContentChanged={onFileContentChanged}
         />
         }
         {currentPost.comments.map(comment =>

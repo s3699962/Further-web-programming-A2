@@ -219,6 +219,20 @@ footer {
   font-weight: bold;
 }
 
+.profileImage {
+  display: inline-block;
+  padding-top: 5px;
+}
+
+.uploadProfileImage {
+  padding-bottom: 15px;
+}
+
+.userImage{
+  padding: 5px 25px;
+  font-size: 400% !important;
+}
+
 .profileHeader {
   font-size: xx-large;
   font-weight: bolder;
@@ -332,7 +346,7 @@ footer {
 .userInfoContainer {
   display: inline-block;
   margin: 0 20px;
-  vertical-align: middle;
+  vertical-align: top;
 }
 
 .userInfoContainer h3 {
@@ -527,6 +541,10 @@ footer {
 .addPostButton {
   display: inline-flex;
   float: left;
+  padding: 4px 10px !important;
+}
+
+.forumUploadButton {
   margin-top: 10px;
 }
 
@@ -590,6 +608,15 @@ footer {
 .commentName {
   display: inline-block;
   margin-right: 15px;
+}
+
+.commentContent {
+  background-color: white;
+  border-radius: 5px;
+}
+
+.commentContent img{
+  padding-left: 10px;
 }
 
 .commentLikeSection {
@@ -686,12 +713,27 @@ footer {
   min-width: 700px;
   padding-left: 15px;
   font-size: larger;
+  vertical-align: top;
+  margin-top: 18px;
+}
+
+.extraPadded {
+  margin-top: 37px !important;
+}
+
+.image {
+  padding-bottom: 10px;
+}
+
+.followRowImage {
+  margin: 0 20px;
 }
 
 .followButtonContainer {
   display: inline-block;
+  float: right;
   vertical-align: top;
-  margin-top: 5px
+  margin-top: 18px;
 }
 
 .toggledButton {

@@ -1,5 +1,7 @@
 const db = require("../database");
 const argon2 = require("argon2");
+const {convertImage} = require("./Utils");
+
 
 // Select all users from the database.
 exports.all = async (req, res) => {
@@ -34,7 +36,8 @@ exports.create = async (req, res) => {
     email: req.body.email,
     password_hash: hash,
     name: req.body.name,
-    dateJoined: req.body.dateJoined
+    dateJoined: req.body.dateJoined,
+    avatarId: null
   });
 
   res.json(user);
@@ -49,7 +52,6 @@ exports.delete = async (req, res) => {
 
 // Update user details
 exports.update = async(req, res) => {
-  console.log("user", req.params.email);
 
   let user;
   //if password is not being changed no need to update it
@@ -77,4 +79,11 @@ exports.update = async(req, res) => {
   }
 
   res.json(user);
+};
+
+exports.addAvatar = async (req, res) => {
+  const avatarId = convertImage(req.body.image);
+  await db.user.update({ avatarId: avatarId}, { where: {email: req.params.email}});
+
+  res.json(avatarId)
 };

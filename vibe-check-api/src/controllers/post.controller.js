@@ -1,3 +1,5 @@
+const {convertImage} = require("./Utils");
+
 const db = require("../database");
 
 // Select all posts from the database.
@@ -19,7 +21,8 @@ exports.create = async (req, res) => {
   const post = await db.post.create({
     text: req.body.text,
     dateTime: req.body.dateTime,
-    userEmail: req.body.userEmail
+    userEmail: req.body.userEmail,
+    imageId: convertImage(req.body.image)
   });
 
   res.json(post);
@@ -31,7 +34,6 @@ exports.delete = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  console.log("request");
   const post = await db.post.update({
     text: req.body.text,
   }, {

@@ -5,26 +5,38 @@ export const UserFollowTable = ({users, allFriends, followers, currentUser, type
 
   const generateAllUsersRows = () => {
     return users?.filter(user => user.email !== currentUser.email)
-        .map(user => ({ ...user,
+        .map(user => ({
+          ...user,
           following: isUserAFriend(user.email)
         }));
 
-    };
+  };
 
   const generateFriendsRows = () => {
-    return allFriends?.map(friend => ({...friend,
-      email    : friend.followingUser,
-      name     : users?.find(user => user.email === friend.followingUser).name,
-      following: true
-    }));
+    return allFriends?.map(friend => {
+          const user = users?.find(user => user.email === friend.followingUser);
+          return ({
+            ...friend,
+            email    : friend.followingUser,
+            name     : user.name,
+            avatarId : user.avatarId,
+            following: true
+          })
+        }
+    )
   };
 
   const generateFollowersRows = () => {
-    return followers?.map(follower => ({...follower,
-      email    : follower.userEmail,
-      name     : users?.find(user => user.email === follower.userEmail).name,
-      following: isUserAFriend(follower.userEmail)
-    }));
+    return followers?.map(follower => {
+      const user = users?.find(user => user.email === follower.userEmail);
+      return ({
+        ...follower,
+        email    : follower.userEmail,
+        name     : user.name,
+        avatarId : user.avatarId,
+        following: isUserAFriend(follower.userEmail)
+      })
+    });
   };
 
   const isUserAFriend = (userEmail) => {

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Buttons";
 import ConfirmationModal from "./ConfirmationModal";
 import {EditInputSection} from "./InputSections";
-import {createCommentLike, deleteComment, deleteCommentLike, updateComment} from "../data/repository";
+import {createCommentLike, deleteComment, deleteCommentLike, makeImageUrl, updateComment} from "../data/repository";
 import {sanitize} from "./Utils";
 
 /** This component is responsible for displaying a comment in a post and handling the comment
@@ -10,6 +10,7 @@ import {sanitize} from "./Utils";
  * */
 
 export function CommentContainer({posts, setPosts, user, editedPost, currentComment, setServerError}) {
+
   const [editedComment, setEditedComment] = useState(currentComment.text);
   const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
   const [enableEditComment, setEnableEditComment] = useState(false);
@@ -19,6 +20,7 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
   /* text to pass to the confirmation modal component */
   const deleteCommentModalText = "Are you sure you want to delete this comment? It will be forever lost.";
   const deleteCommentModalHeader = "Delete Comment";
+
 
   const handleInputChange = (event) => {
       setEditedComment(event.target.value);
@@ -156,7 +158,10 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
                 submitButtonText={"Edit Comment"}
                 inputName={"editedComment"}
             />
-            : <p>{currentComment.text}</p>
+            : <div className='commentContent'>
+              <p>{currentComment.text}</p>
+              {currentComment.imageId && <img className='image' height={"400"} src={makeImageUrl(currentComment.imageId)}/>}
+            </div>
         }
       </div>
   )
