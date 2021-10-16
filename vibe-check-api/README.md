@@ -8,8 +8,8 @@ In this project I have :
 
 Node.js and Express.js are both used here to create an API and back-end for Vibe-check. Node.js will use Sequelize to query the Cloud MySQL. 
 
-architecture.png
-(sourced from COSC2758 week 8 lab notes)
+![Alt text](architecture-diagram.png)
+(sourced from COSC2758 assignment 2 specifications)
 ## Available Scripts
 
 In the project directory, you can run:
