@@ -4,7 +4,8 @@ const db = require("../database");
 exports.create = async (req, res) => {
   const like = await db.comment_like.create({
     userEmail: req.body.userEmail,
-    postId: req.body.postId
+    commentId: req.body.commentId,
+    like: req.body.like
   });
 
   res.json(like);

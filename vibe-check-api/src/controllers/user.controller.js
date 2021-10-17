@@ -46,6 +46,7 @@ exports.create = async (req, res) => {
 //Delete a user
 exports.delete = async (req, res) => {
   await db.user.destroy({where: {email: req.params.email}});
+  await db.follow.destroy({where: {followingUser: req.params.email}});
   res.json(null);
 };
 

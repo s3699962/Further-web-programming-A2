@@ -748,3 +748,13 @@ footer {
   font-size: small;
   color: #4d4d4d;
 }
+
+.disabledSmallButton {
+  color: #bfbfbf;
+  border: #bfbfbf 1px solid;
+}
+
+.disabledSmallButton:hover {
+  color: #bfbfbf;
+  border: #bfbfbf 1px solid;
+}

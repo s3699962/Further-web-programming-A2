@@ -44,11 +44,20 @@ export function UploadButton({onClick, value, forumUploadButton}) {
   )
 }
 
-export function SmallInvertedIconButton({onClick, type, value}) {
-  const icon = (type === "like") ? "fa fa-heart" : "fa fa-comment";
+export function SmallInvertedIconButton({onClick, type, value, disabled}) {
+  const icon = () => {
+    if (type === "like") {
+      return "fa fa-thumbs-up";
+    } else if (type === "dislike") {
+      return "fa fa-thumbs-down";
+    }
+    else return "fa fa-comment";
+  };
+  const className = disabled ? "commentButton disabledSmallButton" : "commentButton";
+
   return (
-      <button className="commentButton" onClick={onClick}>
-        <i className={icon}/> {value}
+      <button className={className} onClick={onClick} disabled={disabled}>
+        <i className={icon()}/> {value}
       </button>
   )
 }

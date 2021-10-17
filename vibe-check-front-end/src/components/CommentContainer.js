@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Buttons";
 import ConfirmationModal from "./ConfirmationModal";
 import {EditInputSection} from "./InputSections";
-import {createCommentLike, deleteComment, deleteCommentLike, makeImageUrl, updateComment} from "../data/repository";
+import {createCommentDislike, createCommentLike, deleteComment, deleteCommentLike, makeImageUrl, updateComment} from "../data/repository";
 import {sanitize} from "./Utils";
 
 /** This component is responsible for displaying a comment in a post and handling the comment
@@ -15,7 +15,10 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
   const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
   const [enableEditComment, setEnableEditComment] = useState(false);
   const [errorMessage, setEditCommentErrorMessage] = useState(null);
-  const like = currentComment.comment_likes.some(like => user.email === like.userEmail);
+  const like = currentComment.comment_likes.find(like => user.email === like.userEmail);
+  const isLiked = like && like.like;
+  const isDisliked = like && !like.like;
+
 
   /* text to pass to the confirmation modal component */
   const deleteCommentModalText = "Are you sure you want to delete this comment? It will be forever lost.";
@@ -88,9 +91,9 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
     const comment = post.comments[commentIndex];
 
     try {
-      if (!like) {
+      if (!isLiked) {
         //create the like
-        const response = await createCommentLike({userEmail: user.email, commentId: currentComment.id});
+        const response = await createCommentLike({userEmail: user.email, commentId: currentComment.id, like: true});
         editedPostList[postIndex].comments[commentIndex].comment_likes = [...comment.comment_likes, response];
 
       } else {
@@ -105,6 +108,33 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
       setServerError(true);
     }
   };
+
+  const handleCommentDislike = async () => {
+      const editedPostList = [...posts];
+      const postIndex = editedPostList.findIndex(post => post.id === currentComment.postId);
+      const post = editedPostList[postIndex];
+
+      const commentIndex = post.comments.findIndex(comment => comment.id === currentComment.id);
+      const comment = post.comments[commentIndex];
+
+      try {
+        if (!isDisliked) {
+          //create the dislike
+          const response = await createCommentDislike({userEmail: user.email, commentId: currentComment.id, like: false});
+          editedPostList[postIndex].comments[commentIndex].comment_likes = [...comment.comment_likes, response];
+
+        } else {
+          //delete the dislike
+          const dislikeId = currentComment.comment_likes.find(dislike => user.email === dislike.userEmail).id;
+          await deleteCommentLike(dislikeId);
+          editedPostList[postIndex].comments[commentIndex].comment_likes =
+              editedPostList[postIndex].comments[commentIndex].comment_likes.filter(dislike => dislike.id !== dislikeId)
+        }
+        setPosts(editedPostList);
+      } catch(error) {
+        setServerError(true);
+      }
+    };
 
   const onCancelEditComment = () => {
       clearEditState();
@@ -126,9 +156,13 @@ export function CommentContainer({posts, setPosts, user, editedPost, currentComm
             </div>
             <div className="repliesSection commentLikeSection">
               <div className="likesContainer">
-                <i className="fa fa-heart"/> {currentComment.comment_likes.length} Likes
+                <i className="fa fa-thumbs-up"/> {currentComment.comment_likes.filter(like => like.like).length} Likes
               </div>
-              <SmallInvertedIconButton onClick={handleCommentLike} type={"like"} value={like ? "Unlike" : "Like"}/>
+              <SmallInvertedIconButton onClick={handleCommentLike} type={"like"} disabled={isDisliked} value={isLiked ? "Unlike" : "Like"}/>
+              <div className="likesContainer">
+                <i className="fa fa-thumbs-down"/> {currentComment.comment_likes.filter(dislike => !dislike.like).length} Dislikes
+              </div>
+              <SmallInvertedIconButton onClick={handleCommentDislike} type={"dislike"} disabled={isLiked} value={isDisliked ? "Un-dislike" : "Dislike"}/>
             </div>
           </div>
           {user.email === currentComment?.userEmail &&

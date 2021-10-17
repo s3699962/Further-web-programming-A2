@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./src/database");
-const getRawBody = require('raw-body')
 
 // Database will be sync'ed in the background.
 db.sync();

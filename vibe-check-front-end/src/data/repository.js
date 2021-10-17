@@ -99,6 +99,15 @@ async function deletePostLike(id) {
   return await axios.delete(API_HOST + `/api/post-like/${id}`);
 }
 
+
+/** ---- Post DisLike ----------------------------------------------------------------------------------- */
+
+async function createPostDislike(dislike) {
+  const response = await axios.post(API_HOST + "/api/post-like", dislike);
+
+  return response.data;
+}
+
 /** ---- Comment Like -------------------------------------------------------------------------------- */
 
 async function createCommentLike(like) {
@@ -109,6 +118,14 @@ async function createCommentLike(like) {
 
 async function deleteCommentLike(id) {
   return await axios.delete(API_HOST + `/api/comment-like/${id}`);
+}
+
+/** ---- Comment DisLike -------------------------------------------------------------------------------- */
+
+async function createCommentDislike(dislike) {
+  const response = await axios.post(API_HOST + "/api/comment-like", dislike);
+
+  return response.data;
 }
 
 /** ---- Follow -------------------------------------------------------------------------------------- */
@@ -177,5 +194,7 @@ export {
   updatePost,
   updateComment,
   makeImageUrl,
-  addAnAvatar
+  addAnAvatar,
+  createPostDislike,
+  createCommentDislike,
 }

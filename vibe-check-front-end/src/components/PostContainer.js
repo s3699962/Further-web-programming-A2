@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {formattedDate, sanitize} from "./Utils";
-import {createComment, createPostLike, deletePostLike, deletePost, updatePost, makeImageUrl} from "../data/repository";
+import {createComment, createPostLike, deletePostLike, deletePost, updatePost, makeImageUrl, createPostDislike} from "../data/repository";
 import ConfirmationModal from "./ConfirmationModal";
 import {DeleteIconButton, EditIconButton, SmallInvertedIconButton} from "./Buttons";
 import {CommentContainer} from "./CommentContainer";
@@ -10,6 +10,7 @@ import {CommentInputSection, EditInputSection} from "./InputSections";
  * likes and comments.
  * */
 function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
+
   const [enableEditPost, setEnableEditPost] = useState(false);
   const [comment, setComment] = useState("");
   const [editedPost, setEditedPost] = useState(currentPost.text);
@@ -18,7 +19,10 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
   const [editPostErrorMessage, setEditPostErrorMessage] = useState(null);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [fileContent, setFileContent] = useState(null);
-  const like = currentPost.post_likes.some(like => user.email === like.userEmail);
+  const like = currentPost.post_likes.find(like => user.email === like.userEmail);
+  const isLiked = like && like.like;
+  const isDisliked = like && !like.like;
+
 
   //Handle uploaded file content
   const onFileContentChanged = (fileContent) => {
@@ -87,13 +91,35 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
     const post = editedPostList[index];
 
     try {
-      if (!like) {
+      if (!isLiked) {
         //create the like
-        const response = await createPostLike({userEmail: user.email, postId: currentPost.id});
+        const response = await createPostLike({userEmail: user.email, postId: currentPost.id, like: true});
         editedPostList[index].post_likes = [...post.post_likes, response];
 
       } else {
         //delete the like
+        const likeId = currentPost.post_likes.find(like => user.email === like.userEmail).id;
+        await deletePostLike(likeId);
+        editedPostList[index].post_likes = editedPostList[index].post_likes.filter(like => like.id !== likeId)
+      }
+      setPosts(editedPostList);
+    } catch (error) {
+      setServerError(true);
+    }
+  };
+  const handlePostDisLike = async () => {
+    const editedPostList = [...posts];
+    const index = editedPostList.findIndex(post => post.id === currentPost.id);
+    const post = editedPostList[index];
+
+    try {
+      if (!isDisliked) {
+        //create the dislike
+        const response = await createPostDislike({userEmail: user.email, postId: currentPost.id, like: false});
+        editedPostList[index].post_likes = [...post.post_likes, response];
+
+      } else {
+        //delete the dislike
         const likeId = currentPost.post_likes.find(like => user.email === like.userEmail).id;
         await deletePostLike(likeId);
         editedPostList[index].post_likes = editedPostList[index].post_likes.filter(like => like.id !== likeId)
@@ -202,9 +228,13 @@ function PostContainer({user, currentPost, posts, setPosts, setServerError}) {
 
         <div className="repliesSection">
           <div className="likesContainer">
-            <i className="fa fa-heart"/> {currentPost.post_likes.length} Likes
+            <i className="fa fa-thumbs-up"/> {currentPost.post_likes.filter(like => like.like).length} Likes
           </div>
-          <SmallInvertedIconButton onClick={handlePostLike} type={"like"} value={like ? "Unlike" : "Like"}/>
+          <SmallInvertedIconButton onClick={handlePostLike} type={"like"} disabled={isDisliked} value={isLiked ? "Unlike" : "Like"}/>
+          <div className="likesContainer">
+            <i className="fa fa-thumbs-down"/> {currentPost.post_likes.filter(dislike => !dislike.like).length} Dislikes
+          </div>
+          <SmallInvertedIconButton onClick={handlePostDisLike} type={"dislike"} disabled={isLiked} value={isDisliked ? "Un-dislike" : "Dislike"}/>
           <SmallInvertedIconButton onClick={toggleCommentInput} type={"comment"} value={"Comment"}/>
         </div>
 
